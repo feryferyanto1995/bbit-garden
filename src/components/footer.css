@@ -1,0 +1,15 @@
+.footer {
+  max-width: var(--content-w);
+  margin: clamp(4rem, 8vw, 7rem) auto 0;
+  padding: 0 var(--pad-x) 2.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 2rem;
+}
+.footer-line {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}

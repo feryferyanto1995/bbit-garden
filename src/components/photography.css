@@ -1,0 +1,258 @@
+.photos-sub {
+  margin-top: 1.6rem;
+}
+
+/* ---------- featured frame: one print on the wall ---------- */
+.photo-stage {
+  margin-top: clamp(3rem, 6vw, 5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.photo-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: zoom-in;
+  animation: feature-in 600ms var(--ease);
+}
+@keyframes feature-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* the mat: a mounted print, not a card */
+.photo-mat {
+  display: block;
+  padding: clamp(0.7rem, 1.6vw, 1.1rem);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: 0 24px 60px color-mix(in oklab, var(--ink) 14%, transparent);
+  transition: box-shadow var(--dur-slow) var(--ease),
+    transform var(--dur-slow) var(--ease),
+    background-color 400ms var(--ease);
+}
+.photo-feature:hover .photo-mat,
+.photo-feature:focus-visible .photo-mat {
+  transform: translateY(-5px);
+  box-shadow: 0 34px 80px color-mix(in oklab, var(--ink) 24%, transparent);
+}
+.photo-feature img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(88vw, 60rem);
+}
+.photo-feature.is-tall img {
+  max-height: min(66dvh, 34rem);
+}
+.photo-feature.is-wide img {
+  max-height: min(60dvh, 30rem);
+}
+
+.photo-feature-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem 1.6rem;
+}
+
+/* ---------- quiet actions ---------- */
+.photo-actions {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  margin-top: 1.6rem;
+}
+.photo-actions-sep {
+  color: var(--ink-soft);
+}
+.quiet-action {
+  border: none;
+  background: none;
+  padding: 0.2rem 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--moss) 40%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.24em;
+  transition: color var(--dur-quick) var(--ease),
+    text-decoration-color var(--dur-quick) var(--ease);
+}
+.quiet-action:hover {
+  color: var(--moss);
+  text-decoration-color: var(--moss);
+}
+
+/* ---------- contact sheet ---------- */
+.contact-sheet {
+  list-style: none;
+  margin: clamp(2.2rem, 4vw, 3.2rem) 0 0;
+  padding: 0.9rem 0 0;
+  border-top: 1px solid var(--line-soft);
+  display: flex;
+  justify-content: center;
+  gap: clamp(0.5rem, 1.4vw, 0.9rem);
+  max-width: 100%;
+  overflow-x: auto;
+}
+.sheet-thumb {
+  display: block;
+  padding: 0;
+  border: 1px solid transparent;
+  background: none;
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity var(--dur-quick) var(--ease),
+    border-color var(--dur-quick) var(--ease),
+    transform var(--dur-quick) var(--ease);
+}
+.sheet-thumb img {
+  display: block;
+  width: clamp(52px, 7vw, 72px);
+  height: clamp(52px, 7vw, 72px);
+  object-fit: cover;
+}
+.sheet-thumb:hover,
+.sheet-thumb:focus-visible {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+.sheet-thumb.is-current {
+  opacity: 1;
+  border-color: var(--moss);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .photo-feature {
+    animation: none;
+  }
+}
+
+/* ---------- lightbox ---------- */
+.lightbox {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: 100vw;
+  max-height: 100dvh;
+  width: 100vw;
+  height: 100dvh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox[open] {
+  display: flex;
+}
+.lightbox::backdrop {
+  background: color-mix(in oklab, oklch(15% 0.02 140) 88%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.lightbox-frame {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  max-width: min(94vw, 1120px);
+  animation: lb-in 360ms var(--ease);
+}
+@keyframes lb-in {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.lightbox-frame > img {
+  max-width: min(92vw, 1120px);
+  max-height: 72dvh;
+  width: auto;
+  height: auto;
+  box-shadow: 0 40px 90px rgb(0 0 0 / 0.55);
+}
+
+.lightbox-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.lightbox-count,
+.lightbox .label {
+  color: oklch(92% 0.015 120);
+}
+.lightbox-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem 1.4rem;
+}
+.lightbox-ig {
+  color: oklch(96% 0.01 120);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.4);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--dur-quick) var(--ease),
+    color var(--dur-quick) var(--ease);
+}
+.lightbox-ig:hover {
+  color: oklch(85% 0.09 130);
+  text-decoration-color: currentColor;
+}
+
+.lightbox-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.25);
+  background: rgb(255 255 255 / 0.06);
+  color: oklch(95% 0.01 120);
+  cursor: pointer;
+  transition: background-color var(--dur-quick) var(--ease),
+    border-color var(--dur-quick) var(--ease),
+    transform var(--dur-quick) var(--ease);
+}
+.lightbox-btn:hover {
+  background: rgb(255 255 255 / 0.16);
+  border-color: rgb(255 255 255 / 0.5);
+  transform: scale(1.06);
+}
+
+.lightbox-nav {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox-frame {
+    animation: none;
+  }
+}

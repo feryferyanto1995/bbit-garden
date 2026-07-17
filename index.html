@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>bbit — a quiet digital garden</title>
+    <meta
+      name="description"
+      content="bbit — the personal garden of Fery: UX work, photography, and the belief that every good thing begins as a seed."
+    />
+    <meta property="og:title" content="bbit — a quiet digital garden" />
+    <meta
+      property="og:description"
+      content="In Bahasa Indonesia, bibit means seed. Plant one."
+    />
+    <link rel="icon" href="/seed.svg" type="image/svg+xml" />
+    <script>
+      // Set theme before first paint to avoid flash.
+      (function () {
+        try {
+          var saved = localStorage.getItem('bbit-theme');
+          var dusk =
+            saved === 'dusk' ||
+            (saved !== 'day' &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          document.documentElement.dataset.theme = dusk ? 'dusk' : 'day';
+        } catch (e) {
+          document.documentElement.dataset.theme = 'day';
+        }
+      })();
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,400..700;1,7..72,400..600&family=Pixelify+Sans:wght@400..700&family=Silkscreen&family=Space+Grotesk:wght@400..700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
