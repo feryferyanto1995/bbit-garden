@@ -4,22 +4,30 @@
    ============================================================ */
 
 :root {
-  /* -- color: day (warm graph paper, warm ink) -- */
-  --bg: oklch(93.5% 0.021 97);
-  --surface: oklch(96.5% 0.014 97);
-  --ink: oklch(23% 0.021 103);
-  --ink-soft: oklch(42% 0.028 100);
-  --moss: oklch(47% 0.088 125);
-  --moss-deep: oklch(37% 0.07 128);
-  --moss-bright: oklch(60% 0.1 122);
-  --clay: oklch(53% 0.112 45);
-  --soil: oklch(44% 0.04 70);
-  --soil-deep: oklch(34% 0.035 66);
+  /* ============================================================
+     bbit.lab OFFICIAL COLOR PALETTE — exact brand hexes
+       Neutrals   beige #F4F1E5 · off-white #F5F3ED · charcoal #1E1D1B
+       Accents    dark olive #5E6C3F · light olive #A3AC7C
+                  taupe #83776A · terracotta #BA6849
+     The *-deep variants are darkened only so taupe/terracotta clear
+     WCAG AA (>=4.5:1) as small text; base hues stay brand-exact.
+     ============================================================ */
+  --bg: #f4f1e5; /* Base Grid Background (Beige) */
+  --surface: #f5f3ed; /* Card Background (Off-White) */
+  --ink: #1e1d1b; /* Typography & UI (Charcoal) */
+  --ink-soft: #57534a; /* secondary text — 6.8:1 */
+  --moss: #5e6c3f; /* Primary Accent (Dark Olive) — links, em, logo dot */
+  --moss-deep: #49542f; /* darker olive — plant stems, strong green */
+  --moss-bright: #a3ac7c; /* Secondary Accent (Light Olive) */
+  --clay: #ba6849; /* Accent (Terracotta) — fills, focus ring, blooms */
+  --clay-deep: #9c4e2e; /* terracotta as text — 5.2:1 */
+  --soil: #83776a; /* Tertiary Accent (Taupe) — soil */
+  --soil-deep: #574f45; /* taupe as text — 7.1:1 */
   --line: color-mix(in oklab, var(--ink) 16%, transparent);
   --line-soft: color-mix(in oklab, var(--ink) 9%, transparent);
   --grid-line: color-mix(in oklab, var(--ink) 7.5%, transparent);
   --grid-size: 34px;
-  --sky-glow: oklch(97% 0.02 100);
+  --sky-glow: #faf7ef;
 
   /* -- type -- */
   --font-serif: 'Literata', Georgia, 'Times New Roman', serif;
@@ -50,20 +58,24 @@
 }
 
 :root[data-theme='dusk'] {
-  --bg: oklch(27% 0.024 120);
-  --surface: oklch(31% 0.026 118);
-  --ink: oklch(93.5% 0.022 105);
-  --ink-soft: oklch(79% 0.03 108);
-  --moss: oklch(74% 0.104 124);
-  --moss-deep: oklch(63% 0.09 126);
-  --moss-bright: oklch(81% 0.11 122);
-  --clay: oklch(72% 0.115 48);
-  --soil: oklch(57% 0.045 66);
-  --soil-deep: oklch(43% 0.04 64);
+  /* dusk: the same brand palette after sunset — charcoal becomes the paper,
+     olive/taupe/terracotta lifted to sit on the dark ground. -deep variants
+     are the *lighter* text-safe accents here. All pass AA on --bg. */
+  --bg: #262420; /* charcoal, warmed */
+  --surface: #302e29;
+  --ink: #f0ede3; /* beige, as the light ink */
+  --ink-soft: #c4bdaf; /* 8.3:1 */
+  --moss: #9ba870; /* olive, lifted — 6.1:1, links/em */
+  --moss-deep: #83905e;
+  --moss-bright: #b8c093;
+  --clay: #cc7c57; /* terracotta, lifted */
+  --clay-deep: #d9906b; /* terracotta as text — 6:1 */
+  --soil: #a99c8d; /* taupe, lifted */
+  --soil-deep: #beb2a3; /* taupe as text — 7.4:1 */
   --line: color-mix(in oklab, var(--ink) 18%, transparent);
   --line-soft: color-mix(in oklab, var(--ink) 10%, transparent);
   --grid-line: color-mix(in oklab, var(--ink) 6%, transparent);
-  --sky-glow: oklch(32% 0.032 125);
+  --sky-glow: #2e2c26;
   color-scheme: dark;
 }
 

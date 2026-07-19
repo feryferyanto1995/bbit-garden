@@ -38,7 +38,7 @@
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 0.875rem;
-  color: var(--soil);
+  color: var(--soil-deep);
   cursor: pointer;
   text-decoration: underline;
   text-decoration-color: color-mix(in oklab, var(--soil) 40%, transparent);
@@ -46,7 +46,7 @@
   transition: color var(--dur-quick) var(--ease);
 }
 .garden-compost:hover {
-  color: var(--clay);
+  color: var(--clay-deep);
 }
 
 /* ---------- contact ---------- */
