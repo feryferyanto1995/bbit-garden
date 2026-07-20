@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from '../hooks/useReducedMotion';
+import { currentTheme, toggleTheme, watchTheme } from '../lib/theme';
+import type { Theme } from '../lib/theme';
 import './cover.css';
 
 interface Mote {
@@ -26,6 +28,8 @@ function sampleWordmark(width: number): {
   w: number;
   h: number;
   cell: number;
+  /** the seed-dot bounds, wordmark-local px */
+  dot: { x: number; y: number; size: number };
 } {
   const word = 'bbit';
   const fontSize = Math.min(320, Math.max(120, width * 0.24));
@@ -77,12 +81,34 @@ function sampleWordmark(width: number): {
       }
     }
   }
-  return { motes, w, h, cell };
+  return {
+    motes,
+    w,
+    h,
+    cell,
+    dot: {
+      x: metrics.width + dotGap,
+      y: baseline - dotSize,
+      size: dotSize,
+    },
+  };
+}
+
+interface DotBox {
+  cx: number;
+  cy: number;
+  size: number;
 }
 
 export function Cover() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const reduced = useReducedMotion();
+  const [dotBox, setDotBox] = useState<DotBox | null>(null);
+  const [theme, setTheme] = useState<Theme>(() =>
+    typeof document === 'undefined' ? 'day' : currentTheme(),
+  );
+
+  useEffect(() => watchTheme(setTheme), []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -125,6 +151,11 @@ export function Cover() {
       startAt = performance.now();
       settled = reduced;
       needsFrame = true;
+      setDotBox({
+        cx: originX + sample.dot.x + sample.dot.size / 2,
+        cy: originY + sample.dot.y + sample.dot.size / 2,
+        size: sample.dot.size,
+      });
     }
 
     function frame(now: number) {
@@ -233,10 +264,15 @@ export function Cover() {
     parent.addEventListener('pointermove', onPointer);
     parent.addEventListener('pointerleave', onLeave);
     window.addEventListener('resize', onResize);
+    // repaint the settled mark in the new ink when the theme flips
+    const unwatch = watchTheme(() => {
+      needsFrame = true;
+    });
     return () => {
       cancelled = true;
       disposed = true;
       cancelAnimationFrame(raf);
+      unwatch();
       parent.removeEventListener('pointermove', onPointer);
       parent.removeEventListener('pointerleave', onLeave);
       window.removeEventListener('resize', onResize);
@@ -259,8 +295,29 @@ export function Cover() {
       <h1 className="visually-hidden">
         bbit — a quiet digital garden by Fery. UX design and photography.
       </h1>
-      <div className="cover-stage" aria-hidden="true">
-        <canvas ref={canvasRef} />
+      <div className="cover-stage">
+        <canvas ref={canvasRef} aria-hidden="true" />
+        {dotBox && (
+          <button
+            type="button"
+            className="cover-dot"
+            style={{
+              left: dotBox.cx,
+              top: dotBox.cy,
+              width: Math.max(44, dotBox.size * 1.7),
+              height: Math.max(44, dotBox.size * 1.7),
+            }}
+            onClick={toggleTheme}
+            aria-label={
+              theme === 'dusk' ? 'Switch to day theme' : 'Switch to dusk theme'
+            }
+            title={theme === 'dusk' ? 'day' : 'dusk'}
+          >
+            <span className="cover-dot-tip label" aria-hidden="true">
+              {theme === 'dusk' ? 'day?' : 'dusk?'}
+            </span>
+          </button>
+        )}
       </div>
       <p className="cover-line">
         <em>Plant</em> the seeds, <em>tend</em> the soil,{' '}

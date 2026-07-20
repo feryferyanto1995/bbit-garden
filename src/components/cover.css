@@ -33,6 +33,66 @@
   inset: 0;
 }
 
+/* ---------- the seed-dot: bbit's green cube is the theme switch ---------- */
+.cover-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border: none;
+  background: transparent; /* the canvas paints the cube itself */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* a moss ring that pulses a few times once the letters settle, then rests */
+.cover-dot::before {
+  content: '';
+  position: absolute;
+  inset: 18%;
+  border: 2px solid var(--moss);
+  opacity: 0;
+  transition: opacity var(--dur-quick) var(--ease),
+    transform var(--dur-quick) var(--ease);
+  animation: dot-call 2s var(--ease) 2.4s 3;
+}
+.cover-dot:hover::before,
+.cover-dot:focus-visible::before {
+  opacity: 0.85;
+  transform: scale(1.12);
+  animation: none;
+}
+@keyframes dot-call {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  35% {
+    opacity: 0.75;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+/* the whisper under the cube: where clicking takes you */
+.cover-dot-tip {
+  position: absolute;
+  top: calc(100% + 0.35rem);
+  left: 50%;
+  transform: translateX(-50%) translateY(-2px);
+  color: var(--moss);
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity var(--dur-quick) var(--ease),
+    transform var(--dur-quick) var(--ease);
+}
+.cover-dot:hover .cover-dot-tip,
+.cover-dot:focus-visible .cover-dot-tip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 .cover-line {
   font-family: var(--font-sans);
   font-weight: 500;
@@ -80,6 +140,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .cover-cue svg {
+    animation: none;
+  }
+  .cover-dot::before {
     animation: none;
   }
 }

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { currentTheme, toggleTheme, watchTheme } from '../lib/theme';
+import type { Theme } from '../lib/theme';
 import './nav.css';
 
 const LINKS = [
@@ -8,13 +10,9 @@ const LINKS = [
   { href: '#garden', label: 'Garden' },
 ];
 
-function currentTheme(): 'day' | 'dusk' {
-  return document.documentElement.dataset.theme === 'dusk' ? 'dusk' : 'day';
-}
-
 export function Nav() {
   const [shown, setShown] = useState(false);
-  const [theme, setTheme] = useState<'day' | 'dusk'>(() =>
+  const [theme, setTheme] = useState<Theme>(() =>
     typeof document === 'undefined' ? 'day' : currentTheme(),
   );
 
@@ -27,16 +25,8 @@ export function Nav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const toggleTheme = () => {
-    const next = currentTheme() === 'dusk' ? 'day' : 'dusk';
-    document.documentElement.dataset.theme = next;
-    try {
-      localStorage.setItem('bbit-theme', next);
-    } catch {
-      /* private mode — fine */
-    }
-    setTheme(next);
-  };
+  // stay in sync with the cover's seed-dot switch (and any future one)
+  useEffect(() => watchTheme(setTheme), []);
 
   return (
     <nav className={`nav ${shown ? 'nav--shown' : ''}`} aria-label="Primary">
