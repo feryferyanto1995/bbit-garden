@@ -18,6 +18,8 @@ export interface ProjectItem {
   status?: string;
   /** a shipped project shows its own first screen instead of a drawn specimen */
   cover?: { src: string; alt: string };
+  /** live App Store listing, if the work has shipped there */
+  appStoreUrl?: string;
   /** screens from the build, if there is a build to show */
   plates?: ProjectPlate[];
 }
@@ -35,7 +37,9 @@ export const PROJECTS: ProjectItem[] = [
       'A journal you cannot re-read. Seal a thought into a blind-box capsule and send it six to twenty-four months out; when it comes back you get one reading, one second look, and then it burns.',
     seed: 20260718,
     species: 'sprout',
-    status: 'v1.0 — submitted to the App Store, July 2026',
+    status: 'v1.0 — live on the App Store',
+    appStoreUrl:
+      'https://apps.apple.com/us/app/orbit-thought-capsule/id6792641443',
     cover: {
       src: 'images/orbit/welcome.jpg',
       alt: 'Orbit\'s welcome screen: a small astronaut with a star antenna holding a glowing capsule against a starfield, above the line "I keep what you let go of".',

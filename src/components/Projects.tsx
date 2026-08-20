@@ -16,6 +16,12 @@ export function Projects() {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const railRef = useRef<HTMLOListElement | null>(null);
   const lastTrigger = useRef<HTMLElement | null>(null);
+  // While a goTo-triggered smooth scroll is still animating, the rail keeps
+  // firing scroll events mid-flight; if onRailScroll read those as a user
+  // swipe it could snap `index` back to wherever the rail happened to be
+  // that frame, silently eating the click that just advanced it.
+  const programmaticScroll = useRef(false);
+  const scrollSettleTimer = useRef<number | undefined>(undefined);
 
   const total = open?.plates?.length ?? 0;
 
@@ -56,6 +62,12 @@ export function Projects() {
       const clamped = Math.max(0, Math.min(items.length - 1, next));
       const el = items[clamped];
       if (!el) return;
+      programmaticScroll.current = true;
+      window.clearTimeout(scrollSettleTimer.current);
+      // safety net if 'scrollend' doesn't fire (no-op scroll, older browser)
+      scrollSettleTimer.current = window.setTimeout(() => {
+        programmaticScroll.current = false;
+      }, 700);
       rail.scrollTo({
         left: el.offsetLeft - rail.offsetLeft,
         behavior: reduced ? 'auto' : 'smooth',
@@ -65,8 +77,12 @@ export function Projects() {
     [reduced],
   );
 
-  // the readout follows whichever screen is sitting at the rail's leading edge
+  // the readout follows whichever screen is sitting at the rail's leading
+  // edge — but only for scrolling the visitor actually drove (touch/trackpad);
+  // a goTo-driven scroll already set the index and must not be second-guessed
+  // by its own in-flight scroll events.
   const onRailScroll = useCallback(() => {
+    if (programmaticScroll.current) return;
     const rail = railRef.current;
     if (!rail) return;
     const items = Array.from(rail.children) as HTMLElement[];
@@ -80,6 +96,17 @@ export function Projects() {
       }
     });
     setIndex(nearest);
+  }, []);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const onSettle = () => {
+      programmaticScroll.current = false;
+      window.clearTimeout(scrollSettleTimer.current);
+    };
+    rail.addEventListener('scrollend', onSettle);
+    return () => rail.removeEventListener('scrollend', onSettle);
   }, []);
 
   useEffect(() => {
@@ -124,11 +151,45 @@ export function Projects() {
         }}
       >
         {open?.plates && (
+          <>
+            <button
+              type="button"
+              className="gallery-side gallery-side--prev"
+              onClick={() => goTo(index - 1)}
+              disabled={index === 0}
+              aria-label="Previous screen"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" />
+              </svg>
+            </button>
+            <button
+              type="button"
+              className="gallery-side gallery-side--next"
+              onClick={() => goTo(index + 1)}
+              disabled={index >= total - 1}
+              aria-label="Next screen"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+                <path d="M9 18l6-6-6-6" />
+              </svg>
+            </button>
           <div className="gallery-inner">
             <header className="gallery-bar">
               <div className="gallery-heading">
                 <h3 className="gallery-name">{open.title}</h3>
                 <p className="gallery-sub">{open.kind}</p>
+                {open.appStoreUrl && (
+                  <a
+                    className="gallery-store"
+                    href={open.appStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Available on the App Store
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                )}
               </div>
 
               <div className="gallery-controls">
@@ -141,28 +202,6 @@ export function Projects() {
                     / {String(total).padStart(2, '0')}
                   </span>
                 </p>
-                <button
-                  type="button"
-                  className="gallery-btn"
-                  onClick={() => goTo(index - 1)}
-                  disabled={index === 0}
-                  aria-label="Previous screen"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                    <path d="M15 18l-6-6 6-6" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  className="gallery-btn"
-                  onClick={() => goTo(index + 1)}
-                  disabled={index >= total - 1}
-                  aria-label="Next screen"
-                >
-                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
-                </button>
                 <button
                   type="button"
                   className="gallery-btn gallery-btn--close"
@@ -199,6 +238,7 @@ export function Projects() {
               ))}
             </ol>
           </div>
+          </>
         )}
       </dialog>
     </section>
@@ -262,6 +302,17 @@ function Specimen({
           <span aria-hidden="true">{p.status ? '◍ ' : '◌ '}</span>
           {p.status ?? 'case study — still growing'}
         </p>
+        {p.appStoreUrl && (
+          <a
+            className="specimen-store"
+            href={p.appStoreUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Available on the App Store
+            <span aria-hidden="true">↗</span>
+          </a>
+        )}
       </div>
     </li>
   );

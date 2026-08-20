@@ -30,7 +30,8 @@
   text-align: right;
 }
 .specimen:nth-child(even) .specimen-desc,
-.specimen:nth-child(even) .specimen-soon {
+.specimen:nth-child(even) .specimen-soon,
+.specimen:nth-child(even) .specimen-store {
   margin-left: auto;
 }
 
@@ -72,6 +73,35 @@
 .specimen-soon--landed {
   font-style: normal;
   color: var(--moss);
+}
+
+.specimen-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: 0.9rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--moss);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--moss) 35%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.24em;
+  transition: text-decoration-color var(--dur-quick) var(--ease),
+    color var(--dur-quick) var(--ease);
+}
+.specimen-store:hover,
+.specimen-store:focus-visible {
+  text-decoration-color: var(--moss);
+}
+.specimen-store span {
+  display: inline-block;
+  transition: transform var(--dur-quick) var(--ease);
+}
+.specimen-store:hover span,
+.specimen-store:focus-visible span {
+  transform: translate(2px, -2px);
 }
 
 /* ============================================================
@@ -219,6 +249,27 @@
   color: oklch(80% 0.03 120);
   margin: 0;
 }
+.gallery-store {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  margin-top: 0.3rem;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: oklch(78% 0.095 128);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.25);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  transition: text-decoration-color var(--dur-quick) var(--ease),
+    color var(--dur-quick) var(--ease);
+}
+.gallery-store:hover,
+.gallery-store:focus-visible {
+  color: oklch(88% 0.1 126);
+  text-decoration-color: currentColor;
+}
 
 .gallery-controls {
   display: flex;
@@ -265,6 +316,44 @@
 .gallery-btn--close {
   margin-left: 0.5rem;
   background: rgb(255 255 255 / 0.12);
+}
+
+/* Page-turn arrows, fixed to the viewport edges rather than the top bar —
+   they read as "turn the page," not as one more control among many. */
+.gallery-side {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  background: rgb(255 255 255 / 0.05);
+  color: oklch(96% 0.01 120);
+  cursor: pointer;
+  transition: background-color var(--dur-quick) var(--ease),
+    border-color var(--dur-quick) var(--ease),
+    opacity var(--dur-quick) var(--ease),
+    transform var(--dur-quick) var(--ease);
+}
+.gallery-side--prev {
+  left: clamp(0.75rem, 3vw, 2.5rem);
+}
+.gallery-side--next {
+  right: clamp(0.75rem, 3vw, 2.5rem);
+}
+.gallery-side:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.15);
+  border-color: rgb(255 255 255 / 0.45);
+  transform: translateY(-50%) scale(1.06);
+}
+.gallery-side:disabled {
+  opacity: 0.25;
+  cursor: default;
 }
 
 /* the rail — screens bleed off the right edge so more is obviously there */
@@ -354,6 +443,13 @@
   .gallery-rail {
     scroll-behavior: auto;
   }
+  .gallery-side:hover:not(:disabled) {
+    transform: translateY(-50%);
+  }
+  .specimen-store:hover span,
+  .specimen-store:focus-visible span {
+    transform: none;
+  }
 }
 
 @media (max-width: 720px) {
@@ -390,5 +486,15 @@
   }
   .screen img {
     max-height: min(62dvh, 560px);
+  }
+  .gallery-side {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+  .gallery-side--prev {
+    left: 0.4rem;
+  }
+  .gallery-side--next {
+    right: 0.4rem;
   }
 }
