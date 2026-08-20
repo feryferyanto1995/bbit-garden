@@ -68,6 +68,293 @@
   color: var(--clay-deep);
   max-width: 44ch;
 }
+/* landed, not pending — moss instead of clay, and it stands upright */
+.specimen-soon--landed {
+  font-style: normal;
+  color: var(--moss);
+}
+
+/* ============================================================
+   Shipped work: the product shows its own face
+   A project that exists gets its first screen instead of a drawn
+   specimen — no frame, no mat, just the object resting on the paper.
+   ============================================================ */
+.specimen-fig--shipped {
+  gap: 1.1rem;
+}
+
+.specimen-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.specimen-screen {
+  display: block;
+  border-radius: clamp(15px, 2.2vw, 24px);
+  /* Stacked falloff rather than one flat blur — this is what reads as weight.
+     Day: a real cast shadow on the paper. Dusk: a dark screen on a dark ground
+     needs the opposite, a tight ambient halo, or its edge disappears. */
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 8px 18px rgb(0 0 0 / 0.1),
+    0 26px 52px rgb(0 0 0 / 0.14), 0 56px 110px rgb(0 0 0 / 0.13);
+  transition: transform var(--dur-slow) var(--ease),
+    box-shadow var(--dur-slow) var(--ease);
+}
+:root[data-theme='dusk'] .specimen-screen {
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.5), 0 20px 44px rgb(0 0 0 / 0.45),
+    0 0 34px color-mix(in oklab, var(--ink) 9%, transparent);
+}
+.specimen-screen img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: clamp(340px, 44vw, 540px);
+  border-radius: inherit;
+}
+.specimen-trigger:hover .specimen-screen,
+.specimen-trigger:focus-visible .specimen-screen {
+  transform: translateY(-9px) scale(1.014);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 0.11), 0 12px 26px rgb(0 0 0 / 0.12),
+    0 38px 72px rgb(0 0 0 / 0.18), 0 80px 150px rgb(0 0 0 / 0.16);
+}
+:root[data-theme='dusk'] .specimen-trigger:hover .specimen-screen,
+:root[data-theme='dusk'] .specimen-trigger:focus-visible .specimen-screen {
+  box-shadow: 0 4px 10px rgb(0 0 0 / 0.55), 0 30px 64px rgb(0 0 0 / 0.5),
+    0 0 46px color-mix(in oklab, var(--ink) 14%, transparent);
+}
+
+.specimen-open {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  color: var(--moss);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--moss) 32%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.26em;
+  transition: text-decoration-color var(--dur-quick) var(--ease);
+}
+.specimen-trigger:hover .specimen-open,
+.specimen-trigger:focus-visible .specimen-open {
+  text-decoration-color: var(--moss);
+}
+
+/* ============================================================
+   Gallery: the whole build, on a dark stage
+   ============================================================ */
+.gallery {
+  border: none;
+  padding: 0;
+  background: transparent;
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.gallery[open] {
+  display: flex;
+}
+/* blur signals the page behind is dismissible, not decoration */
+.gallery::backdrop {
+  background: color-mix(in oklab, oklch(13% 0.018 140) 92%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.gallery-inner {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.4rem, 3vw, 2.4rem);
+  width: min(96vw, 1440px);
+  max-height: 94dvh;
+  animation: gallery-in 420ms var(--ease);
+}
+@keyframes gallery-in {
+  from {
+    opacity: 0;
+    transform: scale(0.99) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.gallery-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 0 clamp(0.25rem, 1.5vw, 1rem) clamp(0.9rem, 1.8vw, 1.3rem);
+  border-bottom: 1px solid rgb(255 255 255 / 0.14);
+}
+.gallery-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.gallery-name {
+  font-family: var(--font-sans);
+  font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.25rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: oklch(97% 0.008 120);
+  margin: 0;
+}
+.gallery-sub {
+  font-family: var(--font-tiny);
+  font-size: 0.5925rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: oklch(80% 0.03 120);
+  margin: 0;
+}
+
+.gallery-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.gallery-count {
+  margin: 0 0.6rem 0 0;
+  font-family: var(--font-tiny);
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+}
+.gallery-count-now {
+  color: oklch(97% 0.008 120);
+}
+.gallery-count-of {
+  color: oklch(68% 0.02 120);
+}
+
+.gallery-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  background: rgb(255 255 255 / 0.05);
+  color: oklch(96% 0.01 120);
+  cursor: pointer;
+  transition: background-color var(--dur-quick) var(--ease),
+    border-color var(--dur-quick) var(--ease),
+    opacity var(--dur-quick) var(--ease);
+}
+.gallery-btn:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.15);
+  border-color: rgb(255 255 255 / 0.45);
+}
+.gallery-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.gallery-btn--close {
+  margin-left: 0.5rem;
+  background: rgb(255 255 255 / 0.12);
+}
+
+/* the rail — screens bleed off the right edge so more is obviously there */
+.gallery-rail {
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem clamp(0.25rem, 1.5vw, 1rem) 0.5rem;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1.4rem, 3vw, 3rem);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: clamp(0.25rem, 1.5vw, 1rem);
+  scrollbar-width: none;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 2.5%,
+    #000 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 2.5%,
+    #000 92%,
+    transparent 100%
+  );
+}
+.gallery-rail::-webkit-scrollbar {
+  display: none;
+}
+
+.screen {
+  flex: none;
+  scroll-snap-align: start;
+}
+.screen figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  animation: screen-in 520ms var(--ease) backwards;
+  animation-delay: calc(140ms + var(--i, 0) * 55ms);
+}
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.screen img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-height: min(70dvh, 720px);
+  border-radius: clamp(16px, 1.6vw, 26px);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.4), 0 18px 40px rgb(0 0 0 / 0.45),
+    0 50px 110px rgb(0 0 0 / 0.5);
+}
+.screen figcaption {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+  text-wrap: balance;
+  max-width: 26ch;
+  color: oklch(85% 0.025 120);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .specimen-trigger:hover .specimen-screen,
+  .specimen-trigger:focus-visible .specimen-screen {
+    transform: none;
+  }
+  .gallery-inner,
+  .screen figure {
+    animation: none;
+  }
+  .gallery-rail {
+    scroll-behavior: auto;
+  }
+}
 
 @media (max-width: 720px) {
   .specimen,
@@ -91,5 +378,17 @@
   }
   .specimen-canvas {
     max-width: 240px;
+  }
+  .specimen-trigger {
+    align-items: flex-start;
+  }
+  .specimen-screen img {
+    max-height: 420px;
+  }
+  .gallery-bar {
+    align-items: center;
+  }
+  .screen img {
+    max-height: min(62dvh, 560px);
   }
 }

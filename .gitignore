@@ -25,3 +25,6 @@ dist-ssr
 
 # dev screenshot artifacts
 shots/
+
+# graphify analysis output
+graphify-out/

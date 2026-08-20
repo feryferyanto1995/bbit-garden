@@ -42,11 +42,13 @@ export function Photography() {
   useEffect(() => {
     const dlg = dialogRef.current;
     if (!dlg) return;
-    if (open !== null && !dlg.open) {
-      dlg.showModal();
+    // Esc closes the native dialog before this runs, so the scroll lock must be
+    // driven by `open` alone — gating it on `dlg.open` leaves the page locked.
+    if (open !== null) {
+      if (!dlg.open) dlg.showModal();
       document.body.style.overflow = 'hidden';
-    } else if (open === null && dlg.open) {
-      dlg.close();
+    } else {
+      if (dlg.open) dlg.close();
       document.body.style.overflow = '';
     }
   }, [open]);
