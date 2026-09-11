@@ -334,7 +334,7 @@ function Specimen({
                 />
               </span>
             </button>
-            {count > 0 && (
+            {count > 0 && p.id !== 'orbit' && (
               <button
                 type="button"
                 className="specimen-open"
