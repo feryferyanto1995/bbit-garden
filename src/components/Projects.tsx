@@ -16,6 +16,11 @@ export function Projects() {
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const railRef = useRef<HTMLOListElement | null>(null);
   const lastTrigger = useRef<HTMLElement | null>(null);
+
+  // the case-study popup — a separate, lighter dialog from the screens gallery
+  const [caseStudy, setCaseStudy] = useState<ProjectItem | null>(null);
+  const caseStudyDialogRef = useRef<HTMLDialogElement | null>(null);
+  const lastCaseStudyTrigger = useRef<HTMLElement | null>(null);
   // While a goTo-triggered smooth scroll is still animating, the rail keeps
   // firing scroll events mid-flight; if onRailScroll read those as a user
   // swipe it could snap `index` back to wherever the rail happened to be
@@ -35,6 +40,15 @@ export function Projects() {
     lastTrigger.current?.focus();
   }, []);
 
+  const showCaseStudy = (project: ProjectItem, trigger: HTMLElement) => {
+    lastCaseStudyTrigger.current = trigger;
+    setCaseStudy(project);
+  };
+  const closeCaseStudy = useCallback(() => {
+    setCaseStudy(null);
+    lastCaseStudyTrigger.current?.focus();
+  }, []);
+
   useEffect(() => {
     const dlg = dialogRef.current;
     if (!dlg) return;
@@ -48,6 +62,18 @@ export function Projects() {
       document.body.style.overflow = '';
     }
   }, [open]);
+
+  useEffect(() => {
+    const dlg = caseStudyDialogRef.current;
+    if (!dlg) return;
+    if (caseStudy) {
+      if (!dlg.open) dlg.showModal();
+      document.body.style.overflow = 'hidden';
+    } else {
+      if (dlg.open) dlg.close();
+      document.body.style.overflow = '';
+    }
+  }, [caseStudy]);
 
   // never leave the page locked if the component unmounts while open
   useEffect(() => () => {
@@ -137,9 +163,63 @@ export function Projects() {
 
       <ol className="specimen-list">
         {PROJECTS.map((p) => (
-          <Specimen key={p.id} project={p} onOpenPlates={show} />
+          <Specimen
+            key={p.id}
+            project={p}
+            onOpenPlates={show}
+            onOpenCaseStudy={showCaseStudy}
+          />
         ))}
       </ol>
+
+      <dialog
+        className="case-study"
+        ref={caseStudyDialogRef}
+        aria-label={caseStudy ? `${caseStudy.title} — case study` : undefined}
+        onClose={() => setCaseStudy(null)}
+        onClick={(e) => {
+          if (e.target === caseStudyDialogRef.current) closeCaseStudy();
+        }}
+      >
+        {caseStudy && (
+          <div className="case-study-card">
+            <button
+              type="button"
+              className="case-study-close"
+              onClick={closeCaseStudy}
+              aria-label="Close"
+            >
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+            {caseStudy.cover && (
+              <span className="case-study-mark">
+                <img
+                  src={asset(caseStudy.cover.src)}
+                  alt=""
+                  width={88}
+                  height={88}
+                />
+              </span>
+            )}
+            <p className="label label--moss">{caseStudy.kind}</p>
+            <h3 className="case-study-title">{caseStudy.title}</h3>
+            <p className="case-study-desc">{caseStudy.description}</p>
+            {caseStudy.caseStudyUrl && (
+              <a
+                className="case-study-link"
+                href={caseStudy.caseStudyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open the full case study
+                <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+        )}
+      </dialog>
 
       <dialog
         className="gallery"
@@ -248,9 +328,11 @@ export function Projects() {
 function Specimen({
   project: p,
   onOpenPlates,
+  onOpenCaseStudy,
 }: {
   project: ProjectItem;
   onOpenPlates: (project: ProjectItem, trigger: HTMLElement) => void;
+  onOpenCaseStudy: (project: ProjectItem, trigger: HTMLElement) => void;
 }) {
   const ref = useReveal<HTMLLIElement>();
   const count = p.plates?.length ?? 0;
@@ -258,29 +340,45 @@ function Specimen({
   return (
     <li className="specimen reveal" ref={ref}>
       <figure className={p.cover ? 'specimen-fig specimen-fig--shipped' : 'specimen-fig'}>
-        {p.cover && count > 0 ? (
-          <button
-            type="button"
-            className="specimen-trigger"
-            onClick={(e) => onOpenPlates(p, e.currentTarget)}
-            aria-haspopup="dialog"
-            aria-label={`Open ${count} screens from the ${p.title} build`}
-          >
-            <span className="specimen-screen">
-              <img
-                src={asset(p.cover.src)}
-                alt={p.cover.alt}
-                width={560}
-                height={1216}
-                loading="lazy"
-                decoding="async"
-                draggable={false}
-              />
-            </span>
-            <span className="specimen-open" aria-hidden="true">
-              See all {count} screens
-            </span>
-          </button>
+        {p.cover ? (
+          <>
+            <button
+              type="button"
+              className="specimen-trigger"
+              onClick={(e) => {
+                if (p.caseStudyUrl) onOpenCaseStudy(p, e.currentTarget);
+                else if (count > 0) onOpenPlates(p, e.currentTarget);
+              }}
+              aria-haspopup="dialog"
+              aria-label={
+                p.caseStudyUrl
+                  ? `About the ${p.title} case study`
+                  : `Open ${count} screens from the ${p.title} build`
+              }
+            >
+              <span className="specimen-screen specimen-screen--mark">
+                <img
+                  src={asset(p.cover.src)}
+                  alt={p.cover.alt}
+                  width={960}
+                  height={898}
+                  loading="lazy"
+                  decoding="async"
+                  draggable={false}
+                />
+              </span>
+            </button>
+            {count > 0 && (
+              <button
+                type="button"
+                className="specimen-open"
+                onClick={(e) => onOpenPlates(p, e.currentTarget)}
+                aria-haspopup="dialog"
+              >
+                See all {count} screens
+              </button>
+            )}
+          </>
         ) : (
           <>
             <SpecimenCanvas seed={p.seed} species={p.species} />
