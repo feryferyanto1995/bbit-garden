@@ -186,117 +186,25 @@
 }
 
 /* ============================================================
-   Case study popup — a small info card, not the full-screen stage.
-   Follows the page's own theme (unlike the gallery's fixed-dark stage)
-   since it's a quick pointer out, not an immersive browsing moment.
+   Case study dialog shell — full-screen, same treatment as the
+   gallery. What renders inside (OrbitCaseStudy) owns its own look.
    ============================================================ */
-.case-study {
+.orbit-case-dialog {
   border: none;
   padding: 0;
   background: transparent;
-  max-width: min(92vw, 440px);
-  width: 100%;
+  width: 100vw;
+  height: 100dvh;
+  max-width: 100vw;
+  max-height: 100dvh;
   display: none;
 }
-.case-study[open] {
+.orbit-case-dialog[open] {
   display: block;
 }
-.case-study::backdrop {
-  background: color-mix(in oklab, var(--ink) 45%, transparent);
-  backdrop-filter: blur(10px);
-}
-.case-study-card {
-  position: relative;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  padding: clamp(1.8rem, 5vw, 2.5rem) clamp(1.6rem, 4vw, 2.2rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 0.85rem;
-  box-shadow: 0 30px 70px rgb(0 0 0 / 0.25);
-  animation: gallery-in 360ms var(--ease);
-}
-.case-study-close {
-  position: absolute;
-  top: 0.85rem;
-  right: 0.85rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.15rem;
-  height: 2.15rem;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  color: var(--ink-soft);
-  cursor: pointer;
-  transition: color var(--dur-quick) var(--ease),
-    border-color var(--dur-quick) var(--ease);
-}
-.case-study-close:hover,
-.case-study-close:focus-visible {
-  color: var(--moss);
-  border-color: var(--moss);
-}
-.case-study-mark {
-  display: block;
-  width: 84px;
-  height: 84px;
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 10px 26px rgb(0 0 0 / 0.22);
-}
-.case-study-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.case-study-title {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 1.5rem;
-  letter-spacing: -0.02em;
-  margin: 0;
-}
-.case-study-desc {
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-  line-height: 1.62;
-  margin: 0;
-  max-width: 38ch;
-}
-.case-study-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  margin-top: 0.5rem;
-  padding: 0.75rem 1.4rem;
-  border-radius: 999px;
-  background: var(--moss);
-  color: var(--surface);
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: transform var(--dur-quick) var(--ease),
-    box-shadow var(--dur-quick) var(--ease);
-}
-.case-study-link:hover,
-.case-study-link:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 26px color-mix(in oklab, var(--moss) 35%, transparent);
-}
-.case-study-link span {
-  display: inline-block;
-  transition: transform var(--dur-quick) var(--ease);
-}
-.case-study-link:hover span,
-.case-study-link:focus-visible span {
-  transform: translate(2px, -2px);
+.orbit-case-dialog::backdrop {
+  background: color-mix(in oklab, oklch(13% 0.018 140) 92%, transparent);
+  backdrop-filter: blur(18px);
 }
 
 /* ============================================================
@@ -571,17 +479,6 @@
   }
   .specimen-store:hover span,
   .specimen-store:focus-visible span {
-    transform: none;
-  }
-  .case-study-card {
-    animation: none;
-  }
-  .case-study-link:hover,
-  .case-study-link:focus-visible {
-    transform: none;
-  }
-  .case-study-link:hover span,
-  .case-study-link:focus-visible span {
     transform: none;
   }
 }

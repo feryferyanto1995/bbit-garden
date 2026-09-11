@@ -4,6 +4,7 @@ import { useReducedMotion } from '../hooks/useReducedMotion';
 import { PROJECTS } from '../data/projects';
 import type { ProjectItem } from '../data/projects';
 import { SpecimenCanvas } from './SpecimenCanvas';
+import { OrbitCaseStudy } from './OrbitCaseStudy';
 import { asset } from '../lib/asset';
 import './projects.css';
 
@@ -173,7 +174,7 @@ export function Projects() {
       </ol>
 
       <dialog
-        className="case-study"
+        className="orbit-case-dialog"
         ref={caseStudyDialogRef}
         aria-label={caseStudy ? `${caseStudy.title} — case study` : undefined}
         onClose={() => setCaseStudy(null)}
@@ -181,43 +182,8 @@ export function Projects() {
           if (e.target === caseStudyDialogRef.current) closeCaseStudy();
         }}
       >
-        {caseStudy && (
-          <div className="case-study-card">
-            <button
-              type="button"
-              className="case-study-close"
-              onClick={closeCaseStudy}
-              aria-label="Close"
-            >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18" />
-              </svg>
-            </button>
-            {caseStudy.cover && (
-              <span className="case-study-mark">
-                <img
-                  src={asset(caseStudy.cover.src)}
-                  alt=""
-                  width={88}
-                  height={88}
-                />
-              </span>
-            )}
-            <p className="label label--moss">{caseStudy.kind}</p>
-            <h3 className="case-study-title">{caseStudy.title}</h3>
-            <p className="case-study-desc">{caseStudy.description}</p>
-            {caseStudy.caseStudyUrl && (
-              <a
-                className="case-study-link"
-                href={caseStudy.caseStudyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Open the full case study
-                <span aria-hidden="true">↗</span>
-              </a>
-            )}
-          </div>
+        {caseStudy?.id === 'orbit' && (
+          <OrbitCaseStudy onClose={closeCaseStudy} />
         )}
       </dialog>
 
@@ -346,13 +312,13 @@ function Specimen({
               type="button"
               className="specimen-trigger"
               onClick={(e) => {
-                if (p.caseStudyUrl) onOpenCaseStudy(p, e.currentTarget);
+                if (p.id === 'orbit') onOpenCaseStudy(p, e.currentTarget);
                 else if (count > 0) onOpenPlates(p, e.currentTarget);
               }}
               aria-haspopup="dialog"
               aria-label={
-                p.caseStudyUrl
-                  ? `About the ${p.title} case study`
+                p.id === 'orbit'
+                  ? `Read the ${p.title} case study`
                   : `Open ${count} screens from the ${p.title} build`
               }
             >

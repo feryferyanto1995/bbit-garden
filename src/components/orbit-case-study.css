@@ -1,0 +1,689 @@
+/* ============================================================
+   Orbit's own case-study stage — a deliberate art-direction break
+   from bbit's paper-and-grid identity. This is Orbit's world (the
+   night sky, the mascot, the amber accent), quoted rather than
+   redrawn in bbit's voice — the same way the screens gallery is
+   already its own dark stage, just taken further because this is a
+   whole product's design language, not a phone-shaped frame.
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Caveat:wght@500;700&display=swap');
+
+.oc {
+  --oc-ground: #0b0918;
+  --oc-panel: #16112b;
+  --oc-panel-2: #1b1536;
+  --oc-edge: rgba(183, 156, 224, 0.15);
+  --oc-edge-soft: rgba(183, 156, 224, 0.08);
+  --oc-cream: #fff6ef;
+  --oc-amber: #ffc454;
+  --oc-amber-soft: #ffde9a;
+  --oc-lav: #b79ce0;
+  --oc-txt: #efe6f4;
+  --oc-txt-dim: #c9b4d4;
+  --oc-txt-faint: #8b7ba8;
+  --oc-ui: 'Nunito', ui-rounded, 'Segoe UI', system-ui, sans-serif;
+  --oc-hand: 'Caveat', 'Segoe Print', cursive;
+
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: radial-gradient(
+      1000px 620px at 82% -8%,
+      rgba(139, 116, 196, 0.4),
+      transparent 60%
+    ),
+    radial-gradient(880px 560px at 4% 6%, rgba(228, 143, 184, 0.22), transparent 62%),
+    var(--oc-ground);
+  color: var(--oc-txt);
+  font-family: var(--oc-ui);
+  font-weight: 600;
+  line-height: 1.55;
+}
+.oc * {
+  box-sizing: border-box;
+}
+.oc p {
+  text-wrap: pretty;
+}
+
+.oc-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.oc-stars i {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.4);
+  animation: oc-twinkle 4.5s ease-in-out infinite;
+}
+@keyframes oc-twinkle {
+  0%,
+  100% {
+    opacity: 0.16;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+.oc-close {
+  position: absolute;
+  top: clamp(0.9rem, 2vw, 1.6rem);
+  right: clamp(0.9rem, 2vw, 1.6rem);
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--oc-cream);
+  cursor: pointer;
+  transition: background-color 220ms ease, border-color 220ms ease;
+}
+.oc-close:hover,
+.oc-close:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.oc-scroll {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.oc-wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 26px;
+}
+
+.oc-eyebrow {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 11.5px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--oc-amber);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+.oc-eyebrow::before {
+  content: '';
+  width: 24px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--oc-amber);
+}
+
+/* ---------- hero ---------- */
+.oc-hero {
+  position: relative;
+  text-align: center;
+  padding: clamp(64px, 10vw, 96px) 0 66px;
+}
+.oc-deco {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: min(660px, 84%);
+  height: 300px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.oc-ring {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgba(183, 156, 224, 0.16);
+  border-radius: 50%;
+}
+.oc-ring--2 {
+  inset: 34px 90px;
+  border-color: rgba(183, 156, 224, 0.1);
+}
+.oc-dot {
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--oc-amber);
+  box-shadow: 0 0 16px var(--oc-amber);
+  animation: oc-spin 22s linear infinite;
+  transform-origin: -318px 0;
+}
+@keyframes oc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.oc-hero-inner {
+  position: relative;
+  z-index: 2;
+}
+.oc-mark {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: clamp(56px, 12vw, 112px);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  margin: 20px 0 0;
+  color: var(--oc-cream);
+}
+.oc-star-glyph {
+  color: var(--oc-amber);
+}
+.oc-hand {
+  font-family: var(--oc-hand);
+  font-weight: 500;
+  font-size: clamp(22px, 3.2vw, 34px);
+  color: var(--oc-amber-soft);
+  margin: 12px 0 0;
+  line-height: 1.25;
+}
+.oc-lede {
+  font-size: 16px;
+  color: var(--oc-txt-dim);
+  max-width: 58ch;
+  margin: 20px auto 0;
+  line-height: 1.62;
+}
+.oc-lede em {
+  color: var(--oc-amber-soft);
+  font-style: italic;
+}
+.oc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+  justify-content: center;
+}
+.oc-chip {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--oc-edge);
+  background: rgba(183, 156, 224, 0.06);
+  color: var(--oc-txt-dim);
+}
+.oc-chip--live {
+  background: rgba(255, 196, 84, 0.14);
+  border-color: rgba(255, 196, 84, 0.4);
+  color: var(--oc-amber);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.oc-chip--live::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--oc-amber);
+  box-shadow: 0 0 8px var(--oc-amber);
+}
+
+/* ---------- sections ---------- */
+.oc-sec {
+  padding: 46px 0;
+}
+.oc-h2 {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: -0.02em;
+  color: var(--oc-cream);
+  margin: 12px 0 0;
+  text-wrap: balance;
+}
+.oc-sub {
+  color: var(--oc-txt-dim);
+  font-size: 15px;
+  max-width: 62ch;
+  margin: 12px 0 0;
+  line-height: 1.62;
+}
+.oc-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, var(--oc-edge), transparent);
+  margin: 0;
+}
+
+/* ---------- ritual ---------- */
+.oc-ritual {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  margin-top: 40px;
+}
+.oc-step {
+  background: linear-gradient(180deg, var(--oc-panel), var(--oc-panel-2));
+  border: 1px solid var(--oc-edge-soft);
+  border-radius: 18px;
+  padding: 20px 16px;
+}
+.oc-step-n {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 13px;
+  color: var(--oc-amber);
+}
+.oc-step-g {
+  font-size: 24px;
+  line-height: 1;
+  margin: 10px 0 8px;
+}
+.oc-step h3 {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--oc-cream);
+  margin: 0 0 5px;
+  letter-spacing: -0.01em;
+}
+.oc-step p {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--oc-txt-dim);
+  line-height: 1.5;
+}
+.oc-step--final {
+  border-color: rgba(255, 196, 84, 0.32);
+  box-shadow: 0 0 40px -22px rgba(255, 196, 84, 0.6);
+}
+
+/* ---------- character ---------- */
+.oc-charrow {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 36px;
+  align-items: center;
+  margin-top: 38px;
+}
+.oc-charcard {
+  margin: 0;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid var(--oc-edge-soft);
+  background: #0a0e26;
+  position: relative;
+}
+.oc-charcard img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.oc-charcard figcaption {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  background: rgba(11, 9, 24, 0.72);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--oc-edge);
+  border-radius: 12px;
+  padding: 8px 13px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--oc-cream);
+}
+.oc-charcard figcaption span {
+  color: var(--oc-amber);
+}
+.oc-chartext p {
+  font-size: 16px;
+  color: var(--oc-txt-dim);
+  line-height: 1.66;
+  margin: 0;
+}
+.oc-note {
+  font-family: var(--oc-hand);
+  font-weight: 500;
+  font-size: clamp(22px, 3vw, 30px);
+  color: var(--oc-amber-soft);
+  margin: 22px 0 0;
+  line-height: 1.32;
+  text-wrap: balance;
+}
+
+/* ---------- screens ---------- */
+.oc-screens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 34px 26px;
+  justify-content: center;
+  margin-top: 40px;
+}
+.oc-shot {
+  width: 220px;
+  margin: 0;
+}
+.oc-phone {
+  display: block;
+  position: relative;
+  border-radius: 34px;
+  padding: 8px;
+  background: linear-gradient(160deg, #2a2440, #14101f);
+  box-shadow: 0 30px 64px -26px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+.oc-phone::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 15px;
+  background: #000;
+  border-radius: 999px;
+  z-index: 3;
+}
+.oc-phone img {
+  width: 100%;
+  display: block;
+  border-radius: 27px;
+}
+.oc-shot figcaption {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.oc-shot-t {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 14.5px;
+  color: var(--oc-cream);
+}
+.oc-shot-d {
+  font-size: 12.5px;
+  color: var(--oc-txt-dim);
+  line-height: 1.5;
+}
+
+/* ---------- system ---------- */
+.oc-grid3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+.oc-card {
+  background: linear-gradient(180deg, var(--oc-panel), var(--oc-panel-2));
+  border: 1px solid var(--oc-edge-soft);
+  border-radius: 20px;
+  padding: 22px;
+}
+.oc-card h3 {
+  margin: 0 0 4px;
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--oc-cream);
+}
+.oc-hint {
+  font-size: 12.5px;
+  color: var(--oc-txt-faint);
+  margin: 0 0 16px;
+  font-weight: 800;
+}
+.oc-sw {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.oc-sw + .oc-sw {
+  margin-top: 9px;
+}
+.oc-sw-c {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  flex: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+.oc-sw-nm {
+  font-size: 12.5px;
+  font-weight: 800;
+  color: var(--oc-txt);
+}
+.oc-sw-hx {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--oc-txt-faint);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+.oc-spec + .oc-spec {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid var(--oc-edge-soft);
+}
+.oc-spec-role {
+  font-size: 10.5px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--oc-lav);
+}
+.oc-spec-nu {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 24px;
+  color: var(--oc-cream);
+  margin-top: 3px;
+  letter-spacing: -0.01em;
+}
+.oc-spec-ca {
+  font-family: var(--oc-hand);
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--oc-amber-soft);
+  margin-top: 2px;
+}
+.oc-spec-use {
+  font-size: 11.5px;
+  color: var(--oc-txt-faint);
+  font-weight: 700;
+  margin-top: 3px;
+}
+.oc-motif {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.oc-motif + .oc-motif {
+  margin-top: 14px;
+}
+.oc-motif-g {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  background: rgba(183, 156, 224, 0.08);
+  border: 1px solid var(--oc-edge-soft);
+}
+.oc-motif-t {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 13.5px;
+  color: var(--oc-cream);
+}
+.oc-motif-d {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--oc-txt-faint);
+}
+
+/* ---------- decisions ---------- */
+.oc-dec {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+.oc-decard {
+  background: linear-gradient(180deg, var(--oc-panel), var(--oc-panel-2));
+  border: 1px solid var(--oc-edge-soft);
+  border-radius: 20px;
+  padding: 24px;
+}
+.oc-decard-k {
+  font-size: 22px;
+  line-height: 1;
+}
+.oc-decard h3 {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 17px;
+  color: var(--oc-cream);
+  margin: 12px 0 7px;
+  letter-spacing: -0.01em;
+}
+.oc-decard p {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--oc-txt-dim);
+  line-height: 1.55;
+}
+
+/* ---------- stats ---------- */
+.oc-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 34px;
+}
+.oc-stat {
+  text-align: center;
+  background: linear-gradient(180deg, var(--oc-panel), var(--oc-panel-2));
+  border: 1px solid var(--oc-edge-soft);
+  border-radius: 18px;
+  padding: 22px 12px;
+}
+.oc-stat-v {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 28px;
+  color: var(--oc-amber);
+  letter-spacing: -0.01em;
+}
+.oc-stat-l {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--oc-txt-dim);
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+/* ---------- closing ---------- */
+.oc-sec--closing {
+  padding-bottom: 0;
+}
+.oc-closing {
+  margin-top: 10px;
+  padding: 34px 30px;
+  border-radius: 24px;
+  background: linear-gradient(120deg, rgba(255, 196, 84, 0.1), rgba(255, 198, 217, 0.07));
+  border: 1px solid rgba(255, 196, 84, 0.24);
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.oc-closing-ava {
+  display: block;
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--oc-edge);
+  flex: none;
+}
+.oc-closing-ava img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.oc-closing-tx {
+  flex: 1;
+  min-width: 260px;
+}
+.oc-closing-tx h3 {
+  font-family: var(--oc-ui);
+  font-weight: 900;
+  font-size: 21px;
+  color: var(--oc-cream);
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+.oc-closing-tx p {
+  margin: 0;
+  color: var(--oc-txt-dim);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.oc-closing-hand {
+  display: block;
+  font-family: var(--oc-hand);
+  font-weight: 700;
+  font-size: 25px;
+  color: var(--oc-amber-soft);
+  margin-top: 12px;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+.oc-footer {
+  text-align: center;
+  padding: 40px 0 56px;
+  color: var(--oc-txt-faint);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+@media (max-width: 860px) {
+  .oc-ritual {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .oc-charrow {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .oc-charcard {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .oc-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .oc-deco {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-stars i,
+  .oc-dot {
+    animation: none;
+  }
+}

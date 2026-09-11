@@ -22,9 +22,6 @@ export interface ProjectItem {
   appStoreUrl?: string;
   /** screens from the build, if there is a build to show */
   plates?: ProjectPlate[];
-  /** a fuller design write-up living elsewhere — clicking the cover opens a
-   *  popup pointing here, rather than straight into the screens gallery */
-  caseStudyUrl?: string;
 }
 
 /**
@@ -43,7 +40,6 @@ export const PROJECTS: ProjectItem[] = [
     status: 'v1.0 — live on the App Store',
     appStoreUrl:
       'https://apps.apple.com/us/app/orbit-thought-capsule/id6792641443',
-    caseStudyUrl: 'https://claude.ai/code/artifact/68cd0265-2444-4dd4-a6db-ccf4b4538a01',
     cover: {
       src: 'images/orbit/logo.jpg',
       alt: 'The Orbit mark: a small round astronaut with a star antenna and a glowing, smiling visor, floating against a starfield.',
