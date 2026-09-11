@@ -24,11 +24,17 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # Custom domain (public/CNAME) serves from the root; the plain
-      # github.io project URL serves from /<repo>/ and needs a base path.
+      # Decided by which repo this workflow is running in, NOT by whether
+      # public/CNAME exists in the tree. This repo's history is shared
+      # across two remotes (thebbitlab/bbit-garden, custom-domain root;
+      # feryferyanto1995/bbit-garden, plain project-page subpath) — keying
+      # off a file's presence means a routine `git push` of shared work can
+      # silently carry the file to the wrong remote and break its base path
+      # (happened once: 2026-09-11). `github.repository` is fixed per remote
+      # and can't drift with the commit content.
       - name: Build
         run: |
-          if [ -f public/CNAME ]; then
+          if [ "${{ github.repository }}" = "thebbitlab/bbit-garden" ]; then
             npm run build
           else
             npm run build -- --base=/${{ github.event.repository.name }}/
