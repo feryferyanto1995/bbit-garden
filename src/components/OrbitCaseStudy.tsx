@@ -121,8 +121,8 @@ export function OrbitCaseStudy({ onClose }: { onClose: () => void }) {
                 <img
                   src={asset('images/orbit/logo.jpg')}
                   alt="Orbit, the app's astronaut mascot — a soft clay character with a star antenna and a warm glowing smile"
-                  width={960}
-                  height={898}
+                  width={1200}
+                  height={1123}
                   loading="lazy"
                 />
                 <figcaption>

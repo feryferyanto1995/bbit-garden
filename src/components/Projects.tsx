@@ -326,8 +326,8 @@ function Specimen({
                 <img
                   src={asset(p.cover.src)}
                   alt={p.cover.alt}
-                  width={960}
-                  height={898}
+                  width={1200}
+                  height={1123}
                   loading="lazy"
                   decoding="async"
                   draggable={false}

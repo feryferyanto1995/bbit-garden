@@ -316,6 +316,7 @@
 }
 .oc-charcard {
   margin: 0;
+  aspect-ratio: 1 / 1;
   border-radius: 26px;
   overflow: hidden;
   border: 1px solid var(--oc-edge-soft);
@@ -323,9 +324,13 @@
   position: relative;
 }
 .oc-charcard img {
+  /* width/height both 100% (not just width) so the img's own HTML
+     width/height attributes can't win a fight with a lone width rule —
+     that's what stretched this: a set height attribute plus only
+     `width:100%` left height locked at the attribute's raw px value. */
   width: 100%;
+  height: 100%;
   display: block;
-  aspect-ratio: 1 / 1;
   object-fit: cover;
 }
 .oc-charcard figcaption {
@@ -393,7 +398,11 @@
   z-index: 3;
 }
 .oc-phone img {
+  /* height:auto is load-bearing — without it the HTML height attribute
+     wins as a hard pixel value while width is squeezed by the layout,
+     and object-fit's default (fill) stretches the image to match. */
   width: 100%;
+  height: auto;
   display: block;
   border-radius: 27px;
 }
